@@ -1,4 +1,5 @@
 import { forwardRef, ComponentProps } from 'react'
+import ColorToggle from './ColorToggle'
 
 type Props = {
   title: string
@@ -7,7 +8,11 @@ type Props = {
 const Header = ({ title, ...props }: Props) => {
   return (
     <header {...props}>
-      <>{title}</>
+      <div className={'flex p-4'}>
+        <p>{title}</p>
+        <div className="w-full" />
+        <ColorToggle />
+      </div>
     </header>
   )
 }
