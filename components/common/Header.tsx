@@ -2,12 +2,16 @@ import Link from 'next/link'
 import { ComponentProps, useContext } from 'react'
 import ColorToggle from './ColorToggle'
 import DrawerToggle from '../ui/Drawer/DrawerToggle'
+import Avatar from './Avatar'
+import UserMenu from './Header/UserMenu'
+import { User } from 'firebase/auth'
 
 type Props = {
   title: string
+  user: User
 } & ComponentProps<'header'>
 
-const Header = ({ title, ...props }: Props) => {
+const Header = ({ title, user, ...props }: Props) => {
   return (
     <header
       {...props}
@@ -23,6 +27,9 @@ const Header = ({ title, ...props }: Props) => {
 
         <div className="grow" />
         <ColorToggle />
+        <div className="px-3">
+          <UserMenu user={user} />
+        </div>
       </div>
     </header>
   )

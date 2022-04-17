@@ -1,17 +1,19 @@
-import { ReactElement } from 'react'
+import { ReactElement, useContext } from 'react'
 import Drawer from '../components/ui/Drawer'
 import { PlayerProvider } from '../components/context/player'
 import Header from '../components/ui/Header'
+import { User } from 'firebase/auth'
 
 type LayoutProps = Required<{
   readonly children: ReactElement
+  user: User
 }>
 
-const PlayerLayout = ({ children }: LayoutProps) => {
+const PlayerLayout = ({ children, user }: LayoutProps) => {
   return (
     <PlayerProvider>
       <div className="h-screen">
-        <Header />
+        <Header user={user} />
         <div className="flex h-full min-h-screen w-full overflow-y-auto">
           <Drawer />
           <main className="w-full">
