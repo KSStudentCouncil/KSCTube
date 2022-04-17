@@ -1,6 +1,7 @@
 import { ComponentProps } from 'react'
 import { useTheme } from 'next-themes'
 import { Icon } from '@iconify/react'
+import ButtonItem from './ButtonItem'
 
 type Props = ComponentProps<'div'>
 
@@ -10,20 +11,12 @@ const ColorToggle = ({ ...props }: Props) => {
   return (
     <>
       <div {...props}>
-        <button
-          className="h-10 w-10 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+        <ButtonItem
+          icon={theme === 'light' ? 'carbon:moon' : 'carbon:sun'}
           onClick={() => {
             setTheme(theme === 'light' ? 'dark' : 'light')
           }}
-        >
-          <div className="m-auto flex h-6 w-6 ">
-            {theme === 'light' ? (
-              <Icon icon="carbon:moon" className="m-auto h-full w-full" />
-            ) : (
-              <Icon icon="carbon:sun" className="m-auto h-full w-full" />
-            )}
-          </div>
-        </button>
+        />
       </div>
     </>
   )

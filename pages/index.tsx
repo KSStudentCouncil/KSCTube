@@ -1,11 +1,8 @@
 import type { NextPage } from 'next'
-// import Head from 'next/head'
-// import Image from 'next/image'
 import Link from 'next/link'
 import { useContext } from 'react'
 import Avatar from '../components/common/Avatar'
 import { AuthContext } from '../components/context/auth'
-// import { useUser } from '../hooks/useUser'
 
 const Home: NextPage = () => {
   const { user } = useContext(AuthContext)

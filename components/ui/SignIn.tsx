@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Icon } from '@iconify/react'
 import { useUser } from '../../hooks/useUser'
 import { useRouter } from 'next/router'
-import { ComponentProps, useContext, useState } from 'react'
+import { ComponentProps, useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../context/auth'
 import Alert from './Alert'
 
@@ -17,6 +17,12 @@ const SignIn = ({ redirectTo, ...props }: Props) => {
 
   const { signInWithPopup } = useUser()
   const { push } = useRouter()
+
+  useEffect(() => {
+    if (user) {
+      push('/home')
+    }
+  }, [user])
 
   return (
     <div {...props} className="">

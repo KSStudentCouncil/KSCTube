@@ -45,7 +45,7 @@ const Alert = ({ colorScheme, title, message, ...props }: Props) => {
   return (
     <div className=" mx-auto flex w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-md dark:bg-gray-800">
       <div className={`flex w-12 items-center justify-center bg-${color}-500`}>
-        <Icon className="h-6 w-6 text-white dark:text-black" icon={icon} />
+        <Icon className="h-6 w-6 text-white " icon={icon} />
       </div>
 
       <div className="-mx-3 px-4 py-2">

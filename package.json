@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^1.5.0",
     "@microsoft/microsoft-graph-client": "^3.0.2",
     "boring-avatars": "^1.6.3",
     "cloudinary": "^1.29.0",

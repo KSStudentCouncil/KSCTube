@@ -1,12 +1,13 @@
 import { NextPageWithLayout } from 'next'
 import Link from 'next/link'
-import { Icon } from '@iconify/react'
-import { useUser } from '../hooks/useUser'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import SignIn from '../components/ui/SignIn'
+import { AuthContext } from '../components/context/auth'
 
 const Page: NextPageWithLayout = () => {
+  const { user } = useContext(AuthContext)
+
   return (
     <>
       <SignIn redirectTo={'/home'} />
