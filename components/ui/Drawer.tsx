@@ -9,15 +9,11 @@ import { Transition } from '@headlessui/react'
 type Props = {} & ComponentProps<'div'>
 
 const Drawer = ({ ...props }: Props) => {
-  const {
-    isDrawerDefault,
-    shouldBeHiddenInDefault,
-    setIsDrawerDefault,
-    toggleDrawer,
-  } = useContext(PlayerContext)
+  const { isDrawerDefault, shouldBeHiddenInDefault, setIsDrawerDefault } =
+    useContext(PlayerContext)
 
   const drawerContent = (
-    <menu className={` flex flex-col gap-y-4 py-3`}>
+    <menu className={`flex flex-col gap-y-4 py-3`}>
       <DrawerRow
         title="ホーム"
         icon="bi:house-door"
@@ -91,7 +87,7 @@ const Drawer = ({ ...props }: Props) => {
               <div
                 className="h-full w-full bg-slate-600 bg-opacity-75 md:hidden"
                 onClick={() => {
-                  toggleDrawer()
+                  setIsDrawerDefault(true)
                 }}
               />
             </Transition.Child>
@@ -105,9 +101,9 @@ const Drawer = ({ ...props }: Props) => {
               {...props}
               className={`absolute z-40 h-full md:hidden ${props.className} `}
             >
-              <div className="h-full">
-                <OverflowDrawer>{drawerContent}</OverflowDrawer>
-              </div>
+              {/* <div className="h-full"> */}
+              <OverflowDrawer>{drawerContent}</OverflowDrawer>
+              {/* </div> */}
             </Transition.Child>
           </div>
         </Transition>

@@ -12,7 +12,7 @@ const PlayerLayout = ({ children }: LayoutProps) => {
     <PlayerProvider>
       <div className="h-screen">
         <Header />
-        <div className="flex min-h-screen overflow-y-auto">
+        <div className="flex h-full min-h-screen w-full overflow-y-auto">
           <Drawer />
           <main className="w-full">
             <div className="overflow-y-auto">{children}</div>

@@ -13,20 +13,14 @@ type Props = {
 
 const SignIn = ({ redirectTo, ...props }: Props) => {
   const [loading, setLoading] = useState(false)
-  const { user } = useContext(AuthContext)
+  // const { user } = useContext(AuthContext)
 
   const { signInWithPopup } = useUser()
   const { push } = useRouter()
 
-  useEffect(() => {
-    if (user) {
-      push('/home')
-    }
-  }, [user])
-
   return (
     <div {...props} className="">
-      {user ? (
+      {/* {user ? (
         <div className="absolute z-50 w-full p-8">
           <div className="flex">
             <div className="w-full" />
@@ -39,7 +33,7 @@ const SignIn = ({ redirectTo, ...props }: Props) => {
         </div>
       ) : (
         <></>
-      )}
+      )} */}
       <div className="flex h-screen">
         <div className={`pb-30 m-auto`}>
           <Link href={'/'}>

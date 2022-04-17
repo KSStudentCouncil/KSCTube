@@ -5,6 +5,9 @@ import {
   OAuthProvider,
   signOut,
   User,
+  setPersistence,
+  browserSessionPersistence,
+  getIdToken,
 } from 'firebase/auth'
 // import { useRouter } from 'next/router'
 import { auth, provider } from '../utils/firebase/auth'
@@ -25,7 +28,7 @@ export const useUser = () => {
 
   const _signInWithPopup = async () => {
     await signInWithPopup(auth, provider)
-      .then(async (result) => {
+      .then((result) => {
         // User is signed in.
         // IdP data available in result.additionalUserInfo.profile.
         if (!result) {
@@ -43,6 +46,24 @@ export const useUser = () => {
         if (!accessToken) {
           throw new Error('Failed to sign in. No access token')
         }
+
+        if (!auth.currentUser) {
+          throw new Error('Failed to sign in. No current user')
+        }
+
+        // TODo: だるいのでSSRしない。セッション管理とかしない。
+        // if (!idToken) {
+        //   throw new Error('Failed to get idToken')
+        // } else {
+        //   // Cookieを保存
+        //   fetch('/api/session', {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({ idToken: idToken }),
+        //   })
+        // }
 
         // TODO: 後回し。プロフ画像を上げる。
         // const client = new MicrosoftClient(accessToken)

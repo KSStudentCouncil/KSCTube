@@ -1,13 +1,12 @@
-import { NextPageWithLayout } from 'next'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
+import { GetServerSideProps, NextPageWithLayout } from 'next'
 import SignIn from '../components/ui/SignIn'
-import { AuthContext } from '../components/context/auth'
+import verifySession from '../utils/functions/verifySession'
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  return await verifySession(ctx)
+}
 
 const Page: NextPageWithLayout = () => {
-  const { user } = useContext(AuthContext)
-
   return (
     <>
       <SignIn redirectTo={'/home'} />

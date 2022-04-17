@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react'
 import { auth } from '../../utils/firebase/auth'
+import nookies from 'nookies'
 
 interface InitialContext {
   user: User | null
@@ -19,16 +20,43 @@ const initialContext: InitialContext = {
 const AuthContext = createContext(initialContext)
 
 const AuthProvider = ({ children }: { children?: ReactNode }) => {
+  const cookieKey = 'session'
+  const interval = 10 * 60 * 1000
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    return auth.onIdTokenChanged(async (user) => {
+      if (!user) {
+        setUser(null)
+        nookies.destroy(null, cookieKey)
+        return
+      }
+
+      const token = await user.getIdToken()
       setUser(user)
+      nookies.destroy(null, cookieKey)
+      nookies.set(undefined, cookieKey, token, {})
     })
-    return () => {
-      unsubscribe()
-    }
   }, [])
+
+  useEffect(() => {
+    const handler = setInterval(async () => {
+      const user = auth.currentUser
+      if (user) {
+        await user.getIdToken(true)
+      }
+    }, interval)
+    return () => clearInterval(handler)
+  }, [])
+
+  // useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged((user) => {
+  //     setUser(user)
+  //   })
+  //   return () => {
+  //     unsubscribe()
+  //   }
+  // }, [])
 
   return (
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
