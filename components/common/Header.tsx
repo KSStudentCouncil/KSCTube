@@ -1,9 +1,6 @@
 import Link from 'next/link'
 import { ComponentProps, useContext } from 'react'
 import ColorToggle from './ColorToggle'
-import { Icon } from '@iconify/react'
-import ButtonItem from './ButtonItem'
-import { PlayerContext } from '../context/player'
 import DrawerToggle from '../ui/Drawer/DrawerToggle'
 
 type Props = {

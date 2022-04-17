@@ -1,16 +1,20 @@
 import { ComponentProps, useContext } from 'react'
 import { PlayerContext } from '../context/player'
-import DrawerRow from '../common/DrawerRow'
+import DrawerRow from '../common/Drawer/DrawerRow'
 import LargeDrawer from '../common/Drawer/LargeDrawer'
 import SmallDrawer from '../common/Drawer/SmallDrawer'
 import OverflowDrawer from '../common/Drawer/OverflowDrawer'
-import { Dialog, Transition } from '@headlessui/react'
+import { Transition } from '@headlessui/react'
 
 type Props = {} & ComponentProps<'div'>
 
 const Drawer = ({ ...props }: Props) => {
-  const { isDrawerDefault, shouldBeHiddenInDefault, toggleDrawer } =
-    useContext(PlayerContext)
+  const {
+    isDrawerDefault,
+    shouldBeHiddenInDefault,
+    setIsDrawerDefault,
+    toggleDrawer,
+  } = useContext(PlayerContext)
 
   const drawerContent = (
     <menu className={` flex flex-col gap-y-4 py-3`}>
@@ -30,45 +34,50 @@ const Drawer = ({ ...props }: Props) => {
         title="ブックマーク"
         icon="bi:bookmarks"
         iconSelected="bi:bookmarks-fill"
-        href="/favorites"
+        href="/bookmarks"
+      />
+      <DrawerRow
+        title="履歴"
+        icon="fluent:history-24-regular"
+        iconSelected="fluent:history-24-filled"
+        href="/history"
       />
     </menu>
   )
 
   //   home ドロワーが通常で隠されていないべきの
   if (!shouldBeHiddenInDefault) {
-    // if (isDrawerDefault) {
     // PC: ドロワーが通常で表示されている
     // モバイル: ドロワー非表示！！
     return (
       <>
-        <Transition show={isDrawerDefault}>
-          <div {...props} className={`hidden md:block ${props.className}`}>
-            <LargeDrawer>{drawerContent}</LargeDrawer>
-          </div>
+        <Transition
+          show={isDrawerDefault}
+          {...props}
+          className={`hidden h-full md:block ${props.className}`}
+        >
+          <LargeDrawer>{drawerContent}</LargeDrawer>
         </Transition>
 
-        {/* </>
-      )
-    } else {
-      // PC: small
-      // モバイル: オーバーフロー
-      return (
-        <> */}
+        {/* // PC: small
+      // モバイル: オーバーフロー */}
+
         <Transition
           show={!isDrawerDefault}
           {...props}
-          className={`hidden md:block ${props.className}`}
+          className={`hidden h-full md:block ${props.className}`}
         >
-          <div>
-            <SmallDrawer>{drawerContent}</SmallDrawer>
-          </div>
+          <SmallDrawer>{drawerContent}</SmallDrawer>
         </Transition>
 
-        <Transition show={!isDrawerDefault}>
-          <Dialog
-            className="fixed inset-0 z-50 h-full overflow-hidden md:hidden"
-            onClose={() => toggleDrawer()}
+        {/*  */}
+        <Transition
+          show={!isDrawerDefault}
+          {...props}
+          className={`absolute h-full md:hidden ${props.className}`}
+        >
+          <div
+            className={`fixed inset-0 z-40 h-full overflow-hidden  md:hidden`}
           >
             <Transition.Child
               enter="transition-opacity ease-in duration-200 "
@@ -77,12 +86,14 @@ const Drawer = ({ ...props }: Props) => {
               leave="transition-opacity ease-out duration-200 "
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
-              className={'absolute z-30 h-full w-full'}
+              className={'absolute h-full w-full md:hidden'}
             >
-              {/* <div className="h-full w-full bg-slate-600 opacity-50 md:hidden" /> */}
-              {/* <Dialog.Overlay> */}
-              <Dialog.Overlay className="h-full w-full bg-slate-600 bg-opacity-75 md:hidden" />
-              {/* </Dialog.Overlay> */}
+              <div
+                className="h-full w-full bg-slate-600 bg-opacity-75 md:hidden"
+                onClick={() => {
+                  toggleDrawer()
+                }}
+              />
             </Transition.Child>
             <Transition.Child
               enter="transition-all ease-in-out duration-300 transform"
@@ -98,7 +109,7 @@ const Drawer = ({ ...props }: Props) => {
                 <OverflowDrawer>{drawerContent}</OverflowDrawer>
               </div>
             </Transition.Child>
-          </Dialog>
+          </div>
         </Transition>
       </>
     )

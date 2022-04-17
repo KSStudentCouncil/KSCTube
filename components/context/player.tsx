@@ -5,7 +5,7 @@ import { createContext, ReactNode, useEffect, useState } from 'react'
 
 interface InitialContext {
   isDrawerDefault: boolean
-  // setIsDrawerDefault: (drawerOpened: boolean) => void
+  setIsDrawerDefault: (drawerOpened: boolean) => void
   toggleDrawer: () => void
 
   /**
@@ -41,6 +41,7 @@ const PlayerProvider = ({ children }: { children?: ReactNode }) => {
     <PlayerContext.Provider
       value={{
         isDrawerDefault,
+        setIsDrawerDefault,
         toggleDrawer,
         shouldBeHiddenInDefault,
         setShouldBeHiddenInDefault,

@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import path from 'path'
-import { PlayerContext } from '../context/player'
+import { PlayerContext } from '../../context/player'
 
 type Props = {
   title: string
@@ -49,7 +49,7 @@ const DrawerRow = ({ title, icon, iconSelected, href, ...props }: Props) => {
           >
             <Icon
               icon={href === pathname ? iconSelected : icon}
-              className={`h-full w-full`}
+              className={`m-auto h-full w-full`}
             />
           </div>
 
