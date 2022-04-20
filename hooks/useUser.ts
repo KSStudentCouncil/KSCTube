@@ -10,6 +10,9 @@ import {
   getIdToken,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  AuthError,
+  AuthErrorCodes,
+  signInAnonymously,
 } from 'firebase/auth'
 // import { useRouter } from 'next/router'
 import { auth, provider } from '../utils/firebase/auth'
@@ -21,6 +24,7 @@ import { useRouter } from 'next/router'
 
 export const useUser = () => {
   const [user, setUser] = useState<User | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const { push } = useRouter()
 
@@ -99,9 +103,11 @@ export const useUser = () => {
     studentNumber: string,
     codeNumber: string
   ) => {
+    setError(null)
+
     // 12810XXX
     if (!studentNumber.match(/12810\d{3}$/)) {
-      console.error('studentNumber is invalid')
+      setError('生徒番号が正しくありません。')
       return
     }
 
@@ -111,24 +117,62 @@ export const useUser = () => {
     const passwordSalt = process.env.NEXT_PUBLIC_PASSWORD_SALT
     const password = codeNumber + passwordSalt
 
-    try {
-      await signInWithEmailAndPassword(auth, email, password).then(() => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
         push('/home')
       })
-    } catch {
-      const credential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      )
-      await updateProfile(credential.user, {
-        displayName: `生徒番号 ${studentNumber}`,
-      })
+      .catch(async (error) => {
+        const errorCode = error.code
+        switch (errorCode) {
+          case AuthErrorCodes.INVALID_PASSWORD: {
+            setError('生徒番号、又はコード番号が間違っています。')
+            break
+          }
+          case AuthErrorCodes.USER_DELETED: {
+            const credential = await createUserWithEmailAndPassword(
+              auth,
+              email,
+              password
+            )
+            await updateProfile(credential.user, {
+              displayName: `生徒番号 ${studentNumber}`,
+            })
 
-      signInWithEmailAndPassword(auth, email, password).then(() => {
+            signInWithEmailAndPassword(auth, email, password).then(() => {
+              push('/home')
+            })
+            break
+          }
+        }
+      })
+  }
+
+  const signInWithGuest = async (
+    /**認証に使う個人のコード */
+    code: string
+  ) => {
+    setError(null)
+
+    if (!code.match(/12\d{1}10\d{3}$/)) {
+      setError('生徒番号が正しくありません。')
+      return
+    }
+
+    await signInAnonymously(auth).then(async (credential) => {
+      if (!credential) {
+        throw new Error('No credential')
+      }
+
+      if (!auth.currentUser) {
+        throw new Error('Failed to sign in. No current user')
+      }
+
+      await updateProfile(credential.user, {
+        displayName: `生徒番号 ${code}`,
+      }).then(() => {
         push('/home')
       })
-    }
+    })
   }
 
   const updateUserProfilePhoto = async (url: string) => {
@@ -154,7 +198,9 @@ export const useUser = () => {
     // signInWithRedirect: _signInWithRedirect,
     signOut: _signOut,
     user,
+    error,
     updateUserProfilePhoto,
-    signInWithStudentNumberAndCodeNumber,
+    // signInWithStudentNumberAndCodeNumber,
+    signInWithGuest,
   }
 }

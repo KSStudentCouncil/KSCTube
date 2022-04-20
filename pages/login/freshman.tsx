@@ -1,11 +1,11 @@
 import SignIn from '../../components/common/SignIn/SignIn'
-import SignInWithEmail from '../../components/common/SignIn/WithEmail'
+import SignInWithGuest from '../../components/common/SignIn/Guest'
 
 const Page = () => {
   return (
     <>
       <SignIn>
-        <SignInWithEmail />
+        <SignInWithGuest />
       </SignIn>
     </>
   )
