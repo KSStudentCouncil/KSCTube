@@ -27,8 +27,8 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
   useEffect(() => {
     return auth.onIdTokenChanged(async (user) => {
       if (!user) {
-        setUser(null)
         nookies.destroy(null, cookieKey)
+        setUser(null)
         return
       }
 

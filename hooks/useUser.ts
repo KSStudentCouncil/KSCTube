@@ -8,6 +8,8 @@ import {
   setPersistence,
   browserSessionPersistence,
   getIdToken,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
 } from 'firebase/auth'
 // import { useRouter } from 'next/router'
 import { auth, provider } from '../utils/firebase/auth'
@@ -15,9 +17,12 @@ import { auth, provider } from '../utils/firebase/auth'
 import { MicrosoftClient } from '../utils/microsoft/client'
 import { updateProfile } from 'firebase/auth'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 export const useUser = () => {
   const [user, setUser] = useState<User | null>(null)
+
+  const { push } = useRouter()
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -41,7 +46,7 @@ export const useUser = () => {
           throw new Error('No credential')
         }
         const accessToken = credential.accessToken
-        const idToken = credential.idToken
+        // const idToken = credential.idToken
 
         if (!accessToken) {
           throw new Error('Failed to sign in. No access token')
@@ -90,44 +95,41 @@ export const useUser = () => {
       })
   }
 
-  // const _signInWithRedirect = () => {
-  //   signInWithRedirect(auth, provider)
+  const signInWithStudentNumberAndCodeNumber = async (
+    studentNumber: string,
+    codeNumber: string
+  ) => {
+    // 12810XXX
+    if (!studentNumber.match(/12810\d{3}$/)) {
+      console.error('studentNumber is invalid')
+      return
+    }
 
-  //   getRedirectResult(auth)
-  //     .then((result) => {
-  //       // User is signed in.
-  //       // IdP data available in result.additionalUserInfo.profile.
-  //       if (!result) {
-  //         return
-  //       }
+    const domain = process.env.NEXT_PUBLIC_EMAIL_DOMAIN
+    const email = studentNumber + '@' + domain
 
-  //       // Get the OAuth access token and ID Token
-  //       const credential = OAuthProvider.credentialFromResult(result)
-  //       if (!credential) {
-  //         throw new Error('No credential')
-  //       }
-  //       const accessToken = credential.accessToken
-  //       // const idToken = credential.idToken
+    const passwordSalt = process.env.NEXT_PUBLIC_PASSWORD_SALT
+    const password = codeNumber + passwordSalt
 
-  //       if (!accessToken) {
-  //         throw new Error('Failed to sign in. No access token')
-  //       }
+    try {
+      await signInWithEmailAndPassword(auth, email, password).then(() => {
+        push('/home')
+      })
+    } catch {
+      const credential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      )
+      await updateProfile(credential.user, {
+        displayName: `生徒番号 ${studentNumber}`,
+      })
 
-  //       const client = new MicrosoftClient(accessToken)
-  //       client.getUserProfilePhoto().then(async (photo) => {
-  //         console.log(photo)
-  //         await updateUserProfilePhoto(photo)
-  //       })
-
-  //       console.log(user?.photoURL)
-
-  //       //  redirect to /home
-  //       router.push(redirectTo ?? '/home')
-  //     })
-  //     .catch((error) => {
-  //       // Handle error.
-  //     })
-  // }
+      signInWithEmailAndPassword(auth, email, password).then(() => {
+        push('/home')
+      })
+    }
+  }
 
   const updateUserProfilePhoto = async (url: string) => {
     // 面倒なので、一度アップロードされていたら二度と変更しない。どうせ誰も気づかないだろうし。
@@ -142,7 +144,9 @@ export const useUser = () => {
   }
 
   const _signOut = () => {
-    signOut(auth)
+    signOut(auth).then(() => {
+      push('/')
+    })
   }
 
   return {
@@ -151,5 +155,6 @@ export const useUser = () => {
     signOut: _signOut,
     user,
     updateUserProfilePhoto,
+    signInWithStudentNumberAndCodeNumber,
   }
 }

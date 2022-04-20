@@ -43,6 +43,13 @@ const UserMenu = ({ user, ...props }: Props) => {
             leaveTo="transform opacity-0 scale-95"
           >
             <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-gray-700 dark:bg-slate-800">
+              <div className="px-1 py-1">
+                <Menu.Item>
+                  <div className="px-4 py-1 text-sm opacity-75">
+                    <p>{user ? user.displayName : '読み込み中...'}</p>
+                  </div>
+                </Menu.Item>
+              </div>
               <div className="px-1 py-1 ">
                 <Menu.Item>
                   {({ active }) => (
