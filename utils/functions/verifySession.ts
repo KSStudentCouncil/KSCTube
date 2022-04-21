@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext } from 'next'
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import nookies from 'nookies'
 import { firebaseAdmin } from '../firebase/admin/admin'
 

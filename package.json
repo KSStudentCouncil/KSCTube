@@ -12,6 +12,7 @@
     "cloudinary": "^1.29.0",
     "firebase": "^9.6.10",
     "firebase-admin": "^10.0.2",
+    "fluid-player": "^3.0.0",
     "next": "latest",
     "next-themes": "^0.1.1",
     "nookies": "^2.5.2",
