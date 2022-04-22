@@ -1,7 +1,18 @@
+import { useEffect, useState } from 'react'
 import { User } from '../types/user'
 import { Video } from '../types/video'
+import { useUser } from './useUser'
 
 export const useVideo = () => {
+  const [videos, setVideos] = useState<Video[]>([])
+  const { user } = useUser()
+
+  useEffect(() => {
+    getAllVideos().then((videos) => {
+      setVideos(videos)
+    })
+  }, [user])
+
   const getAllVideos = async (): Promise<Video[]> => {
     const json = await fetch('/api/video', { method: 'GET' }).then((res) =>
       res.json()
@@ -35,6 +46,7 @@ export const useVideo = () => {
   }
 
   return {
+    videos,
     getAllVideos,
     getVideo,
     getUserVideoData,

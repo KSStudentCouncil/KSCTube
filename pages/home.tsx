@@ -21,14 +21,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 }
 
 const Page: NextPage<Props> = () => {
-  const [videos, setVideos] = useState<Video[]>([])
+  const [sortedByViewsVideo, setSortedByViewsVideo] = useState<Video[]>([])
 
   const { user } = useContext(AuthContext)
-  const { getAllVideos } = useVideo()
+  const { getAllVideos, videos } = useVideo()
 
   useEffect(() => {
     getAllVideos().then((_videos) => {
-      setVideos(
+      setSortedByViewsVideo(
         _videos.sort((a, b) => {
           return a.views - b.views
         })
@@ -42,7 +42,7 @@ const Page: NextPage<Props> = () => {
         {/* <div>homeだよ</div> */}
         {/* // TODO: useTransitionでいい感じに切り替え */}
         <h3 className="text-md my-2 px-6 font-bold">話題の動画</h3>
-        <VideoList videos={videos} />
+        <VideoList videos={sortedByViewsVideo} />
       </div>
     </PlayerLayout>
   )

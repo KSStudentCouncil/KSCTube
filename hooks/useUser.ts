@@ -37,7 +37,7 @@ export const useUser = () => {
 
   const _signInWithPopup = async () => {
     await signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(async (result) => {
         // User is signed in.
         // IdP data available in result.additionalUserInfo.profile.
         if (!result) {
@@ -59,6 +59,13 @@ export const useUser = () => {
         if (!auth.currentUser) {
           throw new Error('Failed to sign in. No current user')
         }
+
+        const user = auth.currentUser
+        if (!user) {
+          throw new Error('Failed to sign in. No user')
+        }
+
+        await setupUserData()
 
         // TODo: だるいのでSSRしない。セッション管理とかしない。
         // if (!idToken) {
@@ -99,53 +106,53 @@ export const useUser = () => {
       })
   }
 
-  const signInWithStudentNumberAndCodeNumber = async (
-    studentNumber: string,
-    codeNumber: string
-  ) => {
-    setError(null)
+  // const signInWithStudentNumberAndCodeNumber = async (
+  //   studentNumber: string,
+  //   codeNumber: string
+  // ) => {
+  //   setError(null)
 
-    // 12810XXX
-    if (!studentNumber.match(/12810\d{3}$/)) {
-      setError('生徒番号が正しくありません。')
-      return
-    }
+  //   // 12810XXX
+  //   if (!studentNumber.match(/12810\d{3}$/)) {
+  //     setError('生徒番号が正しくありません。')
+  //     return
+  //   }
 
-    const domain = process.env.NEXT_PUBLIC_EMAIL_DOMAIN
-    const email = studentNumber + '@' + domain
+  //   const domain = process.env.NEXT_PUBLIC_EMAIL_DOMAIN
+  //   const email = studentNumber + '@' + domain
 
-    const passwordSalt = process.env.NEXT_PUBLIC_PASSWORD_SALT
-    const password = codeNumber + passwordSalt
+  //   const passwordSalt = process.env.NEXT_PUBLIC_PASSWORD_SALT
+  //   const password = codeNumber + passwordSalt
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        push('/home')
-      })
-      .catch(async (error) => {
-        const errorCode = error.code
-        switch (errorCode) {
-          case AuthErrorCodes.INVALID_PASSWORD: {
-            setError('生徒番号、又はコード番号が間違っています。')
-            break
-          }
-          case AuthErrorCodes.USER_DELETED: {
-            const credential = await createUserWithEmailAndPassword(
-              auth,
-              email,
-              password
-            )
-            await updateProfile(credential.user, {
-              displayName: `生徒番号 ${studentNumber}`,
-            })
+  //   signInWithEmailAndPassword(auth, email, password)
+  //     .then(() => {
+  //       push('/home')
+  //     })
+  //     .catch(async (error) => {
+  //       const errorCode = error.code
+  //       switch (errorCode) {
+  //         case AuthErrorCodes.INVALID_PASSWORD: {
+  //           setError('生徒番号、又はコード番号が間違っています。')
+  //           break
+  //         }
+  //         case AuthErrorCodes.USER_DELETED: {
+  //           const credential = await createUserWithEmailAndPassword(
+  //             auth,
+  //             email,
+  //             password
+  //           )
+  //           await updateProfile(credential.user, {
+  //             displayName: `生徒番号 ${studentNumber}`,
+  //           })
 
-            signInWithEmailAndPassword(auth, email, password).then(() => {
-              push('/home')
-            })
-            break
-          }
-        }
-      })
-  }
+  //           signInWithEmailAndPassword(auth, email, password).then(() => {
+  //             push('/home')
+  //           })
+  //           break
+  //         }
+  //       }
+  //     })
+  // }
 
   const signInWithGuest = async (
     /**認証に使う個人のコード */
@@ -167,6 +174,8 @@ export const useUser = () => {
         throw new Error('Failed to sign in. No current user')
       }
 
+      await setupUserData()
+
       await updateProfile(credential.user, {
         displayName: `生徒番号 ${code}`,
       }).then(() => {
@@ -175,15 +184,21 @@ export const useUser = () => {
     })
   }
 
-  const updateUserProfilePhoto = async (url: string) => {
-    // 面倒なので、一度アップロードされていたら二度と変更しない。どうせ誰も気づかないだろうし。
-    if (!auth.currentUser) {
-      // console.log('user not found or already has photoURL')
-      return
-    }
+  // const updateUserProfilePhoto = async (url: string) => {
+  //   // 面倒なので、一度アップロードされていたら二度と変更しない。どうせ誰も気づかないだろうし。
+  //   if (!auth.currentUser) {
+  //     // console.log('user not found or already has photoURL')
+  //     return
+  //   }
 
-    await updateProfile(auth.currentUser, {
-      photoURL: url,
+  //   await updateProfile(auth.currentUser, {
+  //     photoURL: url,
+  //   })
+  // }
+
+  const setupUserData = async () => {
+    await fetch('/api/me/setup', {
+      method: 'POST',
     })
   }
 
@@ -199,7 +214,7 @@ export const useUser = () => {
     signOut: _signOut,
     user,
     error,
-    updateUserProfilePhoto,
+    // updateUserProfilePhoto,
     // signInWithStudentNumberAndCodeNumber,
     signInWithGuest,
   }

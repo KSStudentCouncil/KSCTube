@@ -24,7 +24,7 @@ const VideoRow = ({ ...props }: Props) => {
     <div {...props} className={`w-xl ${props.className}`}>
       <Link href={`/wathc/${props.id}`}>
         <a>
-          <img src={props.thumbnailURL} />
+          <img src={props.thumbnailURL} className="aspect-video rounded-md" />
         </a>
       </Link>
       <div className="flex items-start">

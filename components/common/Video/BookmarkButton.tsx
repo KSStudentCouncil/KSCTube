@@ -37,7 +37,7 @@ const BookmarkButton = ({ isBooked, ...props }: Props) => {
   return (
     <button
       {...props}
-      className={`z-20 h-7 w-7 rounded-md hover:bg-slate-300 hover:bg-opacity-75 dark:hover:bg-slate-600  ${
+      className={`z-20 h-7 w-7 rounded-md hover:bg-slate-300 hover:bg-opacity-75 dark:hover:bg-slate-700  ${
         isBooked ? 'text-blue-500' : 'text-slate-500 '
       } ${props.className}`}
     >

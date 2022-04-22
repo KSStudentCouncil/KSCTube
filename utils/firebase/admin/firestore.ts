@@ -15,6 +15,16 @@ export const getVideo = async (id: string): Promise<Video> => {
   return video.data() as Video
 }
 
+export const setupUserVideoData = async (userId: string) => {
+  const userRef = usersRef.doc(userId)
+  const userData: User = {
+    favorites: [],
+    bookmarks: [],
+    history: [],
+  }
+  userRef.set(userData)
+}
+
 // TODO: ユーザーの動画情報(ブックマーク、履歴などの情報)を取得する関数
 export const getUserVideoData = async (userId: string): Promise<User> => {
   const user = await usersRef.doc(userId).get()
