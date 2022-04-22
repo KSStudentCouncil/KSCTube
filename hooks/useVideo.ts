@@ -8,9 +8,11 @@ export const useVideo = () => {
   const { user } = useUser()
 
   useEffect(() => {
-    getAllVideos().then((videos) => {
-      setVideos(videos)
-    })
+    if (user) {
+      getAllVideos().then((videos) => {
+        setVideos(videos)
+      })
+    }
   }, [user])
 
   const getAllVideos = async (): Promise<Video[]> => {
