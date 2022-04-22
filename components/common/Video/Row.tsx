@@ -30,7 +30,11 @@ const VideoRow = ({ ...props }: Props) => {
       <div className="flex items-start">
         <div className="w-full">
           <VideoTagList tags={props.tags} />
-          <p>{props.title}</p>
+          <Link href={`/wathc/${props.id}`}>
+            <a>
+              <p>{props.title}</p>
+            </a>
+          </Link>
           <p className="opacity-75">{props.creator}</p>
         </div>
         <div className="mr-2 mt-2 text-xl">
