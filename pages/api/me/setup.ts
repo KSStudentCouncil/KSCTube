@@ -29,6 +29,13 @@ export default async function handler(
 ) {
   const session = req.cookies.session
 
+  if (!session) {
+    res.status(401).json({
+      message: 'Unauthorized',
+    })
+    return
+  }
+
   // check firebase cookie
   const uid = await auth
     .verifyIdToken(session)

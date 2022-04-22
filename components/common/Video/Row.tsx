@@ -20,9 +20,11 @@ const VideoRow = ({ ...props }: Props) => {
     }
   }, [])
 
+  const watchLink = `/watch/${props.id}`
+
   return (
     <div {...props} className={`w-xl ${props.className}`}>
-      <Link href={`/wathc/${props.id}`}>
+      <Link href={watchLink}>
         <a>
           <img src={props.thumbnailURL} className="aspect-video rounded-md" />
         </a>
@@ -30,7 +32,7 @@ const VideoRow = ({ ...props }: Props) => {
       <div className="flex items-start">
         <div className="w-full">
           <VideoTagList tags={props.tags} />
-          <Link href={`/wathc/${props.id}`}>
+          <Link href={watchLink}>
             <a>
               <p>{props.title}</p>
             </a>

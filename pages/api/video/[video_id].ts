@@ -13,6 +13,10 @@ export default async function handler(
 ) {
   const session = req.cookies.session
 
+  if (!session) {
+    return
+  }
+
   // check firebase cookie
   await auth.verifyIdToken(session).catch((error) => {
     console.error(error)

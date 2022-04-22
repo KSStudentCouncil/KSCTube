@@ -28,12 +28,14 @@ const verifySession = async (ctx: GetServerSidePropsContext) => {
   const cookies = nookies.get(ctx)
   const url = ctx.resolvedUrl || ''
 
+  const session = cookies.session
+
   if (notNeedAuth.includes(url)) {
     return empty
   }
 
   if (unauthenticated.includes(url)) {
-    if (cookies.session) {
+    if (session) {
       // ログイン用のリンクだけどすでにセッションあるのでトップへ
       return redirectTop
     } else {
@@ -42,8 +44,12 @@ const verifySession = async (ctx: GetServerSidePropsContext) => {
     }
   }
 
+  if (!session) {
+    return redirectLogin
+  }
+
   try {
-    await firebaseAdmin.auth().verifyIdToken(cookies.session)
+    await firebaseAdmin.auth().verifyIdToken(session, true)
     // セッションが有効なのでそのまま通過
     return empty
   } catch (err) {

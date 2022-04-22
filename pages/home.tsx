@@ -12,28 +12,42 @@ import { AuthContext } from '../components/context/auth'
 import { useVideo } from '../hooks/useVideo'
 import PlayerLayout from '../layout/player'
 import { Video } from '../types/video'
-import verifySession from '../utils/functions/verifySession'
+import { checkSession } from '../utils/firebase/admin/auth'
+import { getAllVideos } from '../utils/firebase/admin/firestore'
 
-type Props = InferGetStaticPropsType<typeof getServerSideProps>
+type Props = { videos: Video[] } //& InferGetStaticPropsType<typeof getServerSideProps>
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return await verifySession(ctx)
+  const session = await checkSession(ctx)
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+      },
+      props: {},
+    }
+  }
+
+  const videos = await getAllVideos()
+  return {
+    props: {
+      videos: videos,
+    },
+  }
 }
 
-const Page: NextPage<Props> = () => {
+const Page: NextPage<Props> = ({ videos }: Props) => {
   const [sortedByViewsVideo, setSortedByViewsVideo] = useState<Video[]>([])
 
   const { user } = useContext(AuthContext)
-  const { getAllVideos, videos } = useVideo()
 
   useEffect(() => {
-    getAllVideos().then((_videos) => {
-      setSortedByViewsVideo(
-        _videos.sort((a, b) => {
-          return a.views - b.views
-        })
-      )
-    })
+    setSortedByViewsVideo(
+      videos.sort((a, b) => {
+        return a.views - b.views
+      })
+    )
   }, [])
 
   return (
