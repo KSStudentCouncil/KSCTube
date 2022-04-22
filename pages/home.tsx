@@ -9,7 +9,7 @@ import type {
 import { useContext, useEffect, useState } from 'react'
 import VideoList from '../components/common/Video/List'
 import { AuthContext } from '../components/context/auth'
-import { useVideo } from '../hooks/userVideo'
+import { useVideo } from '../hooks/useVideo'
 import PlayerLayout from '../layout/player'
 import { Video } from '../types/video'
 import verifySession from '../utils/functions/verifySession'

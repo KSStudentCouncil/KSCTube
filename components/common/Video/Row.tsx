@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import Link from 'next/link'
 import { ComponentProps, useContext, useEffect, useState } from 'react'
-import { useVideo } from '../../../hooks/userVideo'
+import { useVideo } from '../../../hooks/useVideo'
 import { Video } from '../../../types/video'
 import { VideoContext } from '../../context/video'
 import BookmarkButton from './BookmarkButton'

@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from 'react'
-import { useVideo } from '../../hooks/userVideo'
+import { useVideo } from '../../hooks/useVideo'
 import { User } from '../../types/user'
 
 interface InitialContext {

@@ -42,8 +42,6 @@ const BookmarkButton = ({ isBooked, ...props }: Props) => {
       } ${props.className}`}
     >
       <motion.div animate={controlls} className="m-auto h-5 w-5">
-        {/* // TODO: ブックマーク状態で切り替え */}
-
         <Icon
           icon={isBooked ? 'bi:bookmark-fill' : 'bi:bookmark'}
           className={`h-full w-full`}
