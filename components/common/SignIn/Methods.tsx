@@ -19,7 +19,7 @@ const SignInMethods = () => {
           <span>戻る</span>
         </button>
       </Link>
-      <main className="min-h-96 w-96 rounded-md bg-white shadow-2xl shadow-blue-300/50 dark:bg-slate-800 dark:shadow-blue-300/10  ">
+      <main className="min-h-96 w-96 rounded-md bg-white shadow-2xl shadow-blue-300/50 dark:bg-slate-700 dark:shadow-blue-300/10  ">
         <div className="p-12">
           <div>
             <Link href="/">

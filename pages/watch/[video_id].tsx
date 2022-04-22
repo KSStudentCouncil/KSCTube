@@ -5,6 +5,7 @@ import PlayerLayout from '../../layout/player'
 import { Video } from '../../types/video'
 import { getVideo } from '../../utils/firebase/admin/firestore'
 import { checkSession } from '../../utils/firebase/admin/auth'
+import VideoPlayer from '../../components/common/Video/Player'
 
 type Props = {
   video: Video
@@ -48,9 +49,13 @@ const Page = ({ video }: Props) => {
 
   return (
     <PlayerLayout user={user!}>
-      <div className="h-screen w-full bg-slate-50 pt-4 dark:bg-gray-800">
+      <div className="h-screen w-full bg-slate-50 dark:bg-gray-800">
         {/* <div>homeだよ</div> */}
         {/* // TODO: useTransitionでいい感じに切り替え */}
+        <div className="flex bg-black lg:px-20">
+          <VideoPlayer {...video} className=" aspect-video " />
+        </div>
+
         <h3 className="text-md my-2 px-6 font-bold">{video.title}</h3>
       </div>
     </PlayerLayout>
