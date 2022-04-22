@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     <>
       <ThemeProvider attribute="class" defaultTheme="light">
         <AuthProvider>
-          <div className="bg-white text-black transition-colors duration-200 dark:bg-slate-900 dark:text-white">
+          <div className="bg-white text-black transition-colors duration-200 dark:bg-gray-800 dark:text-white">
             <Component {...pageProps} />
           </div>
         </AuthProvider>

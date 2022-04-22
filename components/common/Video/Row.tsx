@@ -23,7 +23,7 @@ const VideoRow = ({ ...props }: Props) => {
   const watchLink = `/watch/${props.id}`
 
   return (
-    <div {...props} className={`w-xl ${props.className}`}>
+    <div {...props} className={`${props.className}`}>
       <Link href={watchLink}>
         <a>
           <img src={props.thumbnailURL} className="aspect-video rounded-md" />

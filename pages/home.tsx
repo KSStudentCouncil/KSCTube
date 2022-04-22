@@ -9,13 +9,14 @@ import type {
 import { useContext, useEffect, useState } from 'react'
 import VideoList from '../components/common/Video/List'
 import { AuthContext } from '../components/context/auth'
-import { useVideo } from '../hooks/useVideo'
 import PlayerLayout from '../layout/player'
 import { Video } from '../types/video'
 import { checkSession } from '../utils/firebase/admin/auth'
 import { getAllVideos } from '../utils/firebase/admin/firestore'
 
-type Props = { videos: Video[] } //& InferGetStaticPropsType<typeof getServerSideProps>
+type Props = {
+  videos: Video[]
+}
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await checkSession(ctx)
@@ -43,17 +44,35 @@ const Page: NextPage<Props> = ({ videos }: Props) => {
   const { user } = useContext(AuthContext)
 
   useEffect(() => {
-    setSortedByViewsVideo(
-      videos.sort((a, b) => {
-        return a.views - b.views
-      })
-    )
+    // MARK: 本番はこっち
+    // setSortedByViewsVideo(
+    //   videos.sort((a, b) => {
+    //     return a.views - b.views
+    //   })
+    // )
+
+    setSortedByViewsVideo([
+      ...videos,
+      ...videos,
+      ...videos,
+      ...videos,
+      ...videos,
+      ...videos,
+      ...videos,
+      ...videos,
+      ...videos,
+      ...videos,
+      ...videos,
+      ...videos,
+      ...videos,
+      ...videos,
+      ...videos,
+    ])
   }, [])
 
   return (
     <PlayerLayout user={user!}>
-      <div className="h-screen w-full bg-slate-50 pt-4 dark:bg-gray-800">
-        {/* <div>homeだよ</div> */}
+      <div className="h-full w-full bg-slate-50 pt-4 pb-40 dark:bg-gray-800">
         {/* // TODO: useTransitionでいい感じに切り替え */}
         <h3 className="text-md my-2 px-6 font-bold">話題の動画</h3>
         <VideoList videos={sortedByViewsVideo} />

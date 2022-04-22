@@ -16,10 +16,10 @@ const PlayerLayout = ({ children, user }: LayoutProps) => {
       <VideoProvider>
         <div className="h-screen">
           <Header user={user} />
-          <div className="flex h-full min-h-screen w-full overflow-y-auto">
+          <div className="flex h-full w-full overflow-y-auto">
             <Drawer />
-            <main className="w-full">
-              <div className="overflow-y-auto">{children}</div>
+            <main className="h-full w-full overflow-y-auto">
+              <div>{children}</div>
             </main>
           </div>
         </div>
