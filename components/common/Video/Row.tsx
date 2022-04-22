@@ -1,13 +1,25 @@
 import { Icon } from '@iconify/react'
 import Link from 'next/link'
-import { ComponentProps, useState } from 'react'
+import { ComponentProps, useContext, useEffect, useState } from 'react'
+import { useVideo } from '../../../hooks/userVideo'
 import { Video } from '../../../types/video'
-import BookmarkButton from '../../ui/Video/BookmarkButton'
+import { VideoContext } from '../../context/video'
+import BookmarkButton from './BookmarkButton'
+import VideoTagList from './Tag/TagList'
 
 type Props = Video & ComponentProps<'div'>
 
 const VideoRow = ({ ...props }: Props) => {
+  const { user } = useContext(VideoContext)
   const [isBooked, setIsBooked] = useState(false)
+  const { toggleBookmarkVideo } = useVideo()
+
+  useEffect(() => {
+    if (user) {
+      setIsBooked(user.bookmarks.includes(props.id))
+    }
+  }, [])
+
   return (
     <div {...props} className={`w-xl ${props.className}`}>
       <Link href={`/wathc/${props.id}`}>
@@ -17,6 +29,7 @@ const VideoRow = ({ ...props }: Props) => {
       </Link>
       <div className="flex items-start">
         <div className="w-full">
+          <VideoTagList tags={props.tags} />
           <p>{props.title}</p>
           <p className="opacity-75">{props.creator}</p>
         </div>
@@ -26,6 +39,7 @@ const VideoRow = ({ ...props }: Props) => {
             onClick={() => {
               // TODO: ここらへんのまじめな実装
               setIsBooked(!isBooked)
+              toggleBookmarkVideo(props.id)
             }}
           />
         </div>

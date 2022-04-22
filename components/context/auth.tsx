@@ -49,15 +49,6 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
     return () => clearInterval(handler)
   }, [])
 
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged((user) => {
-  //     setUser(user)
-  //   })
-  //   return () => {
-  //     unsubscribe()
-  //   }
-  // }, [])
-
   return (
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   )

@@ -11,6 +11,7 @@ const BookmarkButton = ({ isBooked, ...props }: Props) => {
 
   const bookedAnimation = {
     scale: [1, 1.2, 1, 1],
+
     transition: {
       duration: 0.4,
       ease: 'easeInOut',
@@ -18,7 +19,7 @@ const BookmarkButton = ({ isBooked, ...props }: Props) => {
   }
 
   const unbookedAnimation = {
-    y: [0, 5, 0],
+    y: [0, 5, 0, 0],
     transition: {
       duration: 0.3,
       ease: 'easeInOut',
@@ -36,7 +37,7 @@ const BookmarkButton = ({ isBooked, ...props }: Props) => {
   return (
     <button
       {...props}
-      className={`z-20 h-7 w-7 rounded-md hover:bg-slate-600 hover:bg-opacity-75  ${
+      className={`z-20 h-7 w-7 rounded-md hover:bg-slate-300 hover:bg-opacity-75 dark:hover:bg-slate-600  ${
         isBooked ? 'text-blue-500' : 'text-slate-500 '
       } ${props.className}`}
     >

@@ -4,9 +4,7 @@ import { getVideo } from '../../../utils/firebase/admin/firestore'
 
 const onGet = async (req: NextApiRequest, res: NextApiResponse) => {
   const video = await getVideo(req.query.video_id as string)
-  res.status(200).json({
-    video,
-  })
+  res.status(200).json(video)
 }
 
 export default async function handler(
