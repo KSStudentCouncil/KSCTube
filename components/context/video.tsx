@@ -14,7 +14,7 @@ const VideoContext = createContext(initialContext)
 
 const VideoProvider = ({ children }: { children?: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
-  const { getUserVideoData, toggleBookmarkVideo } = useVideo()
+  const { getUserVideoData } = useVideo()
 
   useEffect(() => {
     getUserVideoData().then((user) => {

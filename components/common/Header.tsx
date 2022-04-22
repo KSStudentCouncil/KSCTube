@@ -15,7 +15,7 @@ const Header = ({ title, user, ...props }: Props) => {
   return (
     <header
       {...props}
-      className={`sticky top-0 z-40 bg-white dark:bg-gray-900 ${props.className}`}
+      className={`sticky top-0 z-40 bg-white dark:bg-slate-700 ${props.className}`}
     >
       <div className={'flex items-center px-5 py-2'}>
         {/* ドロワーのボタン */}
