@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from 'next'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { AuthContext } from '../../components/context/auth'
 import PlayerLayout from '../../layout/player'
 import { Video } from '../../types/video'

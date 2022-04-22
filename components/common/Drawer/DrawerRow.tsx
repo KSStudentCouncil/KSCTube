@@ -13,36 +13,36 @@ type Props = {
 } & ComponentProps<'div'>
 
 const DrawerRow = ({ title, icon, iconSelected, href, ...props }: Props) => {
-  const { isDrawerDefault, shouldBeHiddenInDefault } = useContext(PlayerContext)
+  const { isDrawerDefault, shouldHideInDefault } = useContext(PlayerContext)
   const { pathname } = useRouter()
 
   return (
     <div
       {...props}
       className={
-        isDrawerDefault && !shouldBeHiddenInDefault
+        isDrawerDefault && !shouldHideInDefault
           ? 'w-48'
-          : !isDrawerDefault && !shouldBeHiddenInDefault
+          : !isDrawerDefault && !shouldHideInDefault
           ? 'w-56 md:w-24'
-          : ''
+          : 'w-56'
       }
     >
       <Link href={href}>
         <a
           className={`
           ${
-            isDrawerDefault && !shouldBeHiddenInDefault
+            isDrawerDefault && !shouldHideInDefault
               ? // home などでドロワー展開時
                 'flex items-center px-6 md:flex-row'
-              : !isDrawerDefault && !shouldBeHiddenInDefault
+              : !isDrawerDefault && !shouldHideInDefault
               ? //   home などで最小化時
                 'flex items-center px-6 md:flex-col md:px-0 '
-              : ''
+              : 'flex items-center px-6'
           }`}
         >
           <div
             className={` h-5 w-5 ${
-              !isDrawerDefault && !shouldBeHiddenInDefault
+              !isDrawerDefault && !shouldHideInDefault
                 ? 'mr-2 mb-1 md:mr-0'
                 : 'mr-2'
             }`}
@@ -55,11 +55,11 @@ const DrawerRow = ({ title, icon, iconSelected, href, ...props }: Props) => {
 
           <div
             className={
-              isDrawerDefault && !shouldBeHiddenInDefault
+              isDrawerDefault && !shouldHideInDefault
                 ? 'text-lg'
-                : !isDrawerDefault && !shouldBeHiddenInDefault
+                : !isDrawerDefault && !shouldHideInDefault
                 ? 'text-lg md:text-xs'
-                : ''
+                : 'text-lg'
             }
           >
             {title}

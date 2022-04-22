@@ -1,16 +1,25 @@
-import { ComponentProps, useContext } from 'react'
+import { ComponentProps, useContext, useEffect } from 'react'
 import { PlayerContext } from '../context/player'
 import DrawerRow from '../common/Drawer/DrawerRow'
 import LargeDrawer from '../common/Drawer/LargeDrawer'
 import SmallDrawer from '../common/Drawer/SmallDrawer'
 import OverflowDrawer from '../common/Drawer/OverflowDrawer'
 import { Transition } from '@headlessui/react'
+import { useRouter } from 'next/router'
 
 type Props = {} & ComponentProps<'div'>
 
 const Drawer = ({ ...props }: Props) => {
-  const { isDrawerDefault, shouldBeHiddenInDefault, setIsDrawerDefault } =
-    useContext(PlayerContext)
+  const shouldHideDrawerPaths = [/\/watch\/.*/g]
+
+  const {
+    isDrawerDefault,
+    shouldHideInDefault,
+    setIsDrawerDefault,
+    setShouldHideInDefault,
+  } = useContext(PlayerContext)
+
+  const { pathname } = useRouter()
 
   const drawerContent = (
     <menu className={`flex flex-col gap-y-4 py-3`}>
@@ -41,8 +50,14 @@ const Drawer = ({ ...props }: Props) => {
     </menu>
   )
 
+  useEffect(() => {
+    if (shouldHideDrawerPaths.some((path) => path.test(pathname))) {
+      setShouldHideInDefault(true)
+    }
+  }, [])
+
   //   home ドロワーが通常で隠されていないべきの
-  if (!shouldBeHiddenInDefault) {
+  if (!shouldHideInDefault) {
     // PC: ドロワーが通常で表示されている
     // モバイル: ドロワー非表示！！
     return (
@@ -66,7 +81,7 @@ const Drawer = ({ ...props }: Props) => {
           <SmallDrawer>{drawerContent}</SmallDrawer>
         </Transition>
 
-        {/*  */}
+        {/* オーバーフロー  */}
         <Transition
           show={!isDrawerDefault}
           {...props}
@@ -113,9 +128,47 @@ const Drawer = ({ ...props }: Props) => {
   } else {
     //  プレイヤーの時 ドロワーが通常時隠されているべき
     return (
-      <div {...props}>
-        <LargeDrawer>{drawerContent}</LargeDrawer>
-      </div>
+      <>
+        {/* オーバーフロー  */}
+        <Transition
+          show={!isDrawerDefault}
+          {...props}
+          className={`absolute h-full ${props.className}`}
+        >
+          <div className={`fixed inset-0 z-40 h-full overflow-hidden`}>
+            <Transition.Child
+              enter="transition-opacity ease-in duration-200 "
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="transition-opacity ease-out duration-200 "
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+              className={'absolute h-full w-full'}
+            >
+              <div
+                className="h-full w-full bg-slate-600 bg-opacity-75"
+                onClick={() => {
+                  setIsDrawerDefault(true)
+                }}
+              />
+            </Transition.Child>
+            <Transition.Child
+              enter="transition-all ease-in-out duration-300 transform"
+              enterFrom="-translate-x-56"
+              enterTo="translate-x-0"
+              leave="transition-all ease-in-out duration-300 transform"
+              leaveFrom="translate-x-0"
+              leaveTo="-translate-x-56"
+              {...props}
+              className={`absolute z-40 h-full ${props.className} `}
+            >
+              {/* <div className="h-full"> */}
+              <OverflowDrawer>{drawerContent}</OverflowDrawer>
+              {/* </div> */}
+            </Transition.Child>
+          </div>
+        </Transition>
+      </>
     )
   }
 }

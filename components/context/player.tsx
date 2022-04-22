@@ -11,8 +11,8 @@ interface InitialContext {
   /**
    * これは、**通常時**にドロワーが表示されているべきかどうか、ドロワーを完全に閉じ切ることができるかどうかの値
    */
-  shouldBeHiddenInDefault: boolean
-  setShouldBeHiddenInDefault: (shouldHidden: boolean) => void
+  shouldHideInDefault: boolean
+  setShouldHideInDefault: (shouldHide: boolean) => void
   // ↑英語ゴミだけどごめんね。動いてるからいいんだよ。
 }
 
@@ -24,8 +24,7 @@ const PlayerContext = createContext(initialContext)
 
 const PlayerProvider = ({ children }: { children?: ReactNode }) => {
   const [isDrawerDefault, setIsDrawerDefault] = useState<boolean>(true)
-  const [shouldBeHiddenInDefault, setShouldBeHiddenInDefault] =
-    useState<boolean>(false)
+  const [shouldHideInDefault, setShouldHideInDefault] = useState<boolean>(false)
 
   const { pathname } = useRouter()
 
@@ -43,8 +42,8 @@ const PlayerProvider = ({ children }: { children?: ReactNode }) => {
         isDrawerDefault,
         setIsDrawerDefault,
         toggleDrawer,
-        shouldBeHiddenInDefault,
-        setShouldBeHiddenInDefault,
+        shouldHideInDefault,
+        setShouldHideInDefault,
       }}
     >
       {children}
