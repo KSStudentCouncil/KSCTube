@@ -23,7 +23,7 @@ const DrawerRow = ({ title, icon, iconSelected, href, ...props }: Props) => {
         isDrawerDefault && !shouldBeHiddenInDefault
           ? 'w-48'
           : !isDrawerDefault && !shouldBeHiddenInDefault
-          ? 'w-48 md:w-24'
+          ? 'w-56 md:w-24'
           : ''
       }
     >

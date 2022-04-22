@@ -93,11 +93,11 @@ const Drawer = ({ ...props }: Props) => {
             </Transition.Child>
             <Transition.Child
               enter="transition-all ease-in-out duration-300 transform"
-              enterFrom="-translate-x-48"
+              enterFrom="-translate-x-56"
               enterTo="translate-x-0"
               leave="transition-all ease-in-out duration-300 transform"
               leaveFrom="translate-x-0"
-              leaveTo="-translate-x-48"
+              leaveTo="-translate-x-56"
               {...props}
               className={`absolute z-40 h-full md:hidden ${props.className} `}
             >
